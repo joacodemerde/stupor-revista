@@ -3,133 +3,150 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JOAQUIN MAX | PORTAFOLIO</title>
+    <title>STUPOR | Revolución Sonora</title>
 
-    <!-- 1. FUENTE: SOLO ARCHIVO (Google Fonts) -->
+    <!-- 1. FUENTE: ARCHIVO (Pesos finos y gruesos para contraste) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;700;800&display=swap" rel="stylesheet">
 
     <!-- 2. Estilos dFlip -->
     <link href="https://cdn.jsdelivr.net/npm/dflip/css/dflip.min.css" rel="stylesheet" type="text/css">
     <link href="https://cdn.jsdelivr.net/npm/dflip/css/themify-icons.min.css" rel="stylesheet" type="text/css">
 
     <style>
-        /* --- SISTEMA DE DISEÑO (Extraído de tu PDF) --- */
+        /* --- PALETA DE COLORES STUPOR --- */
         :root {
-            /* El Gris Claro de tus páginas internas (aprox Pág. 5) */
-            --bg-color: #F0F0F0;      
-            
-            /* Tu Naranja Corporativo */
-            --accent-color: #E85E26;  
-            
-            /* Negro para textos (para contraste sobre fondo claro) */
-            --text-main: #111111;     
+            --bg-color: #050505;      /* Negro Profundo */
+            --accent-color: #FF3333;  /* Rojo Neón (Estilo Portada Stupor) */
+            --text-main: #FFFFFF;     /* Blanco Puro */
+            --ui-opacity: 0.6;        /* Transparencia para elementos pasivos */
         }
 
         body, html {
             height: 100%;
             margin: 0;
             background-color: var(--bg-color);
-            /* Tipografía global forzada */
-            font-family: 'Archivo', sans-serif !important; 
+            font-family: 'Archivo', sans-serif !important;
             overflow: hidden;
         }
 
-        /* --- MARCA DE AGUA (Layout Editorial) --- */
-        .brand-footer-left, .brand-footer-right {
+        /* --- ENCABEZADOS DE MARCA (Estilo Editorial Moderno) --- */
+        .brand-header {
             position: fixed;
-            bottom: 30px;
+            top: 40px;
             z-index: 999;
-            font-weight: 700; /* Archivo Bold */
             color: var(--text-main);
-            font-size: 12px;
-            letter-spacing: 0.5px;
             text-transform: uppercase;
             pointer-events: none;
-            line-height: 1.4;
+            line-height: 1;
         }
 
-        .brand-footer-left {
+        /* Título Principal (Izquierda) */
+        .brand-header.left {
             left: 40px;
-            text-align: left;
+            font-weight: 800; /* Extra Bold */
+            font-size: 24px;
+            letter-spacing: 2px; /* Espaciado moderno */
+        }
+        
+        /* Subtítulo pequeño debajo del título */
+        .brand-header.left span {
+            display: block;
+            font-size: 10px;
+            font-weight: 300;
+            margin-top: 5px;
+            opacity: var(--ui-opacity);
+            letter-spacing: 4px;
         }
 
-        .brand-footer-right {
+        /* Edición (Derecha) */
+        .brand-header.right {
             right: 40px;
             text-align: right;
-            color: var(--accent-color); /* Año en Naranja */
+            font-weight: 300;
+            font-size: 12px;
+            letter-spacing: 2px;
+            border-right: 2px solid var(--accent-color); /* Detalle de diseño: línea roja */
+            padding-right: 15px;
         }
 
-        /* --- INTERFAZ DEL VISUALIZADOR --- */
+        /* --- INTERFAZ DEL VISUALIZADOR (Minimalista) --- */
         #flipbook-container {
             height: 100vh;
             width: 100vw;
         }
 
+        /* Limpiamos la barra de herramientas */
         .df-ui-wrapper {
             background: transparent !important;
             box-shadow: none !important;
             border: none !important;
-            padding-bottom: 40px !important;
+            padding-bottom: 30px !important;
         }
 
-        /* Botones (Adaptados al fondo claro) */
+        /* Botones Flotantes */
         .df-ui-btn {
             background: transparent !important;
-            /* Borde gris suave */
-            border: 1px solid rgba(0,0,0,0.1) !important; 
-            /* Iconos negros */
-            color: var(--text-main) !important; 
-            border-radius: 0 !important; 
-            margin: 0 4px !important;
-            transition: all 0.2s ease;
-        }
-
-        /* Estado Hover (Interacción) */
-        .df-ui-btn:hover, .df-ui-btn.active {
-            border-color: var(--accent-color) !important;
-            background: var(--accent-color) !important;
-            color: #fff !important; /* Icono blanco sobre naranja */
-        }
-
-        /* Textos emergentes (Tooltips) */
-        .df-ui-popup {
-            background: var(--text-main) !important;
-            color: #fff !important;
             border: none !important;
-            font-family: 'Archivo', sans-serif !important;
-            font-size: 11px !important;
-            border-radius: 0 !important;
-            padding: 4px 8px !important;
+            color: var(--text-main) !important;
+            border-radius: 50% !important; /* Ligeramente redondeados o totalmente redondos */
+            margin: 0 8px !important;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            opacity: var(--ui-opacity);
+            transform: scale(0.9);
         }
 
-        /* Ocultar links amarillos */
+        /* Interacción Hover */
+        .df-ui-btn:hover, .df-ui-btn.active {
+            color: var(--accent-color) !important; /* Se vuelve rojo */
+            opacity: 1 !important;
+            transform: scale(1.2); /* Crece un poco */
+            text-shadow: 0 0 10px rgba(255, 51, 51, 0.5); /* Resplandor sutil */
+        }
+
+        /* Textos emergentes (Tooltips) estilo técnico */
+        .df-ui-popup {
+            background: var(--bg-color) !important;
+            color: var(--accent-color) !important;
+            border: 1px solid var(--accent-color) !important;
+            font-family: 'Archivo', sans-serif !important;
+            font-weight: 600;
+            font-size: 10px !important;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-radius: 0 !important;
+            padding: 5px 10px !important;
+            box-shadow: 0 0 15px rgba(0,0,0,0.5);
+        }
+
+        /* Ocultar links del PDF (Limpieza visual) */
         .df-page-content .df-link, .df-page-content a {
-            opacity: 0 !important; 
-            background: transparent !important;
+            opacity: 0 !important; background: transparent !important;
         }
         .df-page-content .df-link:hover, .df-page-content a:hover {
             opacity: 0 !important;
         }
 
-        /* Ajuste Móvil */
+        /* Ajustes Mobile */
         @media (max-width: 768px) {
-            .brand-footer-left, .brand-footer-right {
-                bottom: 15px; left: 20px; right: 20px; font-size: 10px;
-            }
+            .brand-header.left { font-size: 18px; left: 20px; top: 20px; }
+            .brand-header.right { font-size: 10px; right: 20px; top: 25px; }
+            .df-ui-wrapper { padding-bottom: 20px !important; }
         }
     </style>
 </head>
 <body>
 
-    <!-- DATOS (Como en tu portafolio) -->
-    <div class="brand-footer-left">
-        JOAQUIN MAX<br>CUEVAS VENTURA
+    <!-- DISEÑO DE MARCA (Fijo en pantalla) -->
+    <div class="brand-header left">
+        STUPOR
+        <span>REVISTA DE MÚSICA</span>
     </div>
     
-    <div class="brand-footer-right">
-        PORTAFOLIO<br>2025
+    <div class="brand-header right">
+        VOLUMEN #1<br>
+        <span style="opacity:0.6; font-size:10px;">MARZO 2024</span>
     </div>
 
     <!-- LIBRO -->
@@ -143,30 +160,29 @@
         jQuery(document).ready(function() {
             
             var bookOptions = {
-                // TU PDF (Asegúrate que el nombre sea exacto)
+                // TU PDF
                 source: "STUPOR_RevistaCompleta_WEB-FINAL_v01_17122025.pdf",
                 
                 webgl: true,
                 height: "100%",
-                duration: 800,
-                
-                // Color de fondo del Canvas 3D (Coincide con el CSS)
-                backgroundColor: "#F0F0F0", 
+                duration: 700, // Un poco más rápido para sensación moderna
+                backgroundColor: "#050505", 
                 
                 disableFolderPath: true, 
 
-                // Textos UI (Todo en mayúsculas, estilo técnico)
+                // Textos UI
                 text: {
-                    toggleSound: "SONIDO",
-                    toggleThumbnails: "VISTA PREVIA",
-                    toggleOutline: "ÍNDICE",
-                    previousPage: "ANTERIOR",
-                    nextPage: "SIGUIENTE",
-                    toggleFullscreen: "PANTALLA COMPLETA",
-                    zoomIn: "ZOOM +",
-                    zoomOut: "ZOOM -"
+                    toggleSound: "Sonido",
+                    toggleThumbnails: "Vista",
+                    toggleOutline: "Indice",
+                    previousPage: "Prev",
+                    nextPage: "Next",
+                    toggleFullscreen: "Full",
+                    zoomIn: "Zoom +",
+                    zoomOut: "Zoom -"
                 },
                 
+                // Controles esenciales
                 allControls: "altPrev,pageNumber,altNext,play,outline,thumbnail,zoomIn,zoomOut,fullScreen",
                 hideControls: "share,download,more" 
             };
