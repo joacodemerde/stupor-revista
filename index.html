@@ -18,7 +18,7 @@
         /* --- CONFIGURACIÓN VISUAL --- */
         :root {
             --bg-color: #050505;      
-            --accent-color: #dc6b2f; 
+            --accent-color: #dc6b2f;  /* TU NARANJA EXACTO */
             --text-main: #FFFFFF;     
             --ui-opacity: 0.7;
         }
@@ -35,11 +35,11 @@
         #grained-container {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 0; 
+            z-index: 0; /* Al fondo */
             pointer-events: none;
         }
 
-        /* Capa del Libro */
+        /* Capa del Libro (Encima del ruido) */
         #flipbook-container {
             height: 100vh;
             width: 100vw;
@@ -47,7 +47,7 @@
             z-index: 10; 
         }
 
-        /* --- INTERFAZ MINIMALISTA & OPTIMIZADA --- */
+        /* --- INTERFAZ MINIMALISTA --- */
         .df-ui-wrapper {
             background: transparent !important;
             box-shadow: none !important;
@@ -55,6 +55,7 @@
             padding-bottom: 30px !important;
         }
 
+        /* Botones Limpios */
         .df-ui-btn {
             background: transparent !important;
             border: none !important;
@@ -68,25 +69,41 @@
             height: auto !important;
         }
 
+        /* Interacción (Naranja) */
         .df-ui-btn:hover, .df-ui-btn.active, .df-ui-btn.info-active {
             color: var(--accent-color) !important;
+            background: transparent !important;
             opacity: 1 !important;
             transform: scale(1.3);
             text-shadow: 0 0 10px rgba(220, 107, 47, 0.5);
         }
 
-        /* Inputs de página */
+        /* --- CORRECCIÓN DEL FOLIO (1/14) --- */
+        .df-ui-page {
+            width: auto !important;
+            min-width: 0 !important;
+            margin: 0 !important;
+            background: transparent !important;
+            box-shadow: none !important;
+            border: none !important;
+        }
         .df-ui-page input {
+            width: 40px !important;
+            text-align: center !important;
             background: transparent !important;
             border: none !important;
             color: var(--text-main) !important;
             font-family: 'Archivo', sans-serif !important;
-            text-align: center !important;
+            font-size: 12px !important;
+            padding: 0 !important;
+            height: 30px !important;
             box-shadow: none !important;
         }
+        .df-ui-btn.df-ui-prev, .df-ui-btn.df-ui-next { margin: 0 2px !important; }
 
-        /* Ocultar elementos innecesarios */
-        .df-page-content .df-link, .df-page-content a { display: none !important; }
+        /* Ocultar links amarillos */
+        .df-page-content .df-link, .df-page-content a { opacity: 0 !important; background: transparent !important; }
+        .df-page-content .df-link:hover, .df-page-content a:hover { opacity: 0 !important; }
 
         /* --- VENTANA MODAL INFO --- */
         .modal-overlay {
@@ -118,9 +135,6 @@
         .close-modal:hover { color: var(--accent-color); }
         .ti-info-custom:before { content: "\e645"; } 
 
-        /* Loader personalizado (opcional pero recomendado) */
-        .df-ui-loading-icon { border: 2px solid var(--accent-color) !important; border-top: 2px solid transparent !important; }
-
     </style>
 </head>
 <body>
@@ -140,7 +154,7 @@
                 <strong style="color:white; font-size:15px; letter-spacing:1px;">Joaquin Max Cuevas Ventura</strong><br>
                 2024</p>
                 <div class="modal-note">
-                    Nota: Este fue un ejercicio de diseño editorial. Proyecto académico sin fines de lucro.
+                    Nota: Este fue un ejercicio de diseño editorial, por lo que esta publicación constituye un proyecto académico exento de cualquier propósito comercial o de lucro.
                 </div>
             </div>
         </div>
@@ -149,27 +163,29 @@
     <!-- LIBRO -->
     <div id="flipbook-container"></div>
 
-    <!-- SCRIPTS -->
+    <!-- 3. SCRIPTS (ORDEN CRÍTICO) -->
+    <!-- jQuery (Necesario para dFlip) -->
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <!-- dFlip -->
     <script src="https://cdn.jsdelivr.net/npm/dflip/js/dflip.min.js"></script>
+    <!-- Grained -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/grained/0.0.2/grained.min.js"></script>
 
     <script>
-        /* -----------------------------------------------------
-           1. FONDO CON RUIDO
-           ----------------------------------------------------- */
+        // 1. INICIAR EL GRANO (Fondo)
         try {
             grained('#grained-container', {
                 "animate": true,
-                "patternWidth": 100, "patternHeight": 100,
-                "grainOpacity": 0.05, "grainDensity": 1,
-                "grainWidth": 1, "grainHeight": 1
+                "patternWidth": 100,
+                "patternHeight": 100,
+                "grainOpacity": 0.05,
+                "grainDensity": 1,
+                "grainWidth": 1,
+                "grainHeight": 1
             });
-        } catch(e) { console.log("Grained error:", e); }
+        } catch(e) { console.log("Error cargando grano: ", e); }
 
-        /* -----------------------------------------------------
-           2. LÓGICA DE VENTANA MODAL
-           ----------------------------------------------------- */
+        // 2. FUNCIONES MODAL
         function toggleInfo() {
             var modal = document.getElementById('infoModal');
             var btn = document.getElementById('btn-info-custom');
@@ -188,56 +204,46 @@
             if (event.target == document.getElementById('infoModal')) toggleInfo();
         }
 
-        /* -----------------------------------------------------
-           3. CONFIGURACIÓN DEL LIBRO OPTIMIZADA
-           ----------------------------------------------------- */
+        // 3. INICIAR LIBRO
         jQuery(document).ready(function() {
             
-            // --- OPCIÓN A: USAR PDF (Más fácil, carga media) ---
-            // Asegúrate que el PDF esté guardado como "Web Optimized" o "Linearized"
-            var sourceFile = "STUPOR_RevistaCompleta_WEB-FINAL_v01_17122025.pdf";
-
-            // --- OPCIÓN B: USAR IMÁGENES (Carga INSTANTÁNEA - Recomendado) ---
-            // Si exportas tu PDF a JPGs, descomenta la línea de abajo y comenta la de arriba.
-            // var sourceFile = ["img/01.jpg", "img/02.jpg", "img/03.jpg", "img/04.jpg"];
+            // ASEGÚRATE QUE ESTE NOMBRE SEA EXACTO AL 100%
+            var pdfName = "STUPOR_RevistaCompleta_WEB-FINAL_v01_17122025.pdf";
 
             var bookOptions = {
-                source: sourceFile,
-                webgl: true,           // Efecto 3D realista
+                source: pdfName,
+                webgl: true,
                 height: "100%",
                 duration: 700, 
-                backgroundColor: "transparent",
-                
-                // --- AJUSTES DE OPTIMIZACIÓN DE CARGA ---
-                autoEnableOutline: false,    // NO carga el índice del PDF (ahorra mucho proceso)
-                autoEnableThumbnail: false,  // NO genera miniaturas al inicio (ahorra memoria)
-                overwritePDFOutline: false,  // Evita reescrituras innecesarias
-                disableFolderPath: true,     // Seguridad básica de rutas
+                backgroundColor: "transparent", // Para ver el grano
+                disableFolderPath: true, 
 
-                // Textos UI
                 text: {
-                    toggleSound: "SONIDO", toggleThumbnails: "VISTA", toggleOutline: "INDICE",
-                    previousPage: "ANT", nextPage: "SIG", toggleFullscreen: "FULL",
-                    zoomIn: "+", zoomOut: "-"
+                    toggleSound: "SONIDO",
+                    toggleThumbnails: "VISTA",
+                    toggleOutline: "INDICE",
+                    previousPage: "ANT",
+                    nextPage: "SIG",
+                    toggleFullscreen: "FULL",
+                    zoomIn: "ZOOM +",
+                    zoomOut: "ZOOM -"
                 },
                 
-                // Controles visibles (Quitamos share/download para limpieza)
-                allControls: "altPrev,pageNumber,altNext,play,thumbnail,zoomIn,zoomOut,fullScreen",
-                
+                allControls: "altPrev,pageNumber,altNext,play,outline,thumbnail,zoomIn,zoomOut,fullScreen",
+                hideControls: "share,download,more",
+
                 onReady: function(scene) {
-                    // Inyectar botón Info personalizado
+                    // Inyectar botón Info
                     var infoBtn = $('<div class="df-ui-btn df-ui-info" id="btn-info-custom" title="INFORMACIÓN"><i class="ti-info-alt"></i></div>');
                     infoBtn.on('click', function() { toggleInfo(); });
-                    
-                    // Insertar en la barra de controles si existe
                     var controls = $('.df-ui-wrapper');
                     if(controls.length > 0) { controls.append(infoBtn); }
                 }
             };
 
-            // Iniciar Plugin
             var book = $("#flipbook-container").flipBook(bookOptions.source, bookOptions);
         });
     </script>
+
 </body>
 </html>
